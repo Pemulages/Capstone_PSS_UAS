@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sertifikat Penyelesaian Kursus</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; }
+        .certificate {
+            background: #fff;
+            border: 8px solid #2c3e50;
+            border-radius: 16px;
+            margin: 40px auto;
+            padding: 40px 60px;
+            max-width: 700px;
+            box-shadow: 0 0 24px #aaa;
+            text-align: center;
+        }
+        .certificate h1 { color: #2c3e50; font-size: 2.5em; margin-bottom: 0.2em; }
+        .certificate h2 { color: #16a085; margin-top: 0; }
+        .certificate .name { font-size: 2em; font-weight: bold; margin: 24px 0 8px; }
+        .certificate .course { font-size: 1.5em; margin-bottom: 16px; }
+        .certificate .date { color: #888; margin-top: 24px; }
+        .certificate .footer { margin-top: 40px; color: #2c3e50; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <h1>Sertifikat Penyelesaian Kursus</h1>
+        <h2>Simple LMS</h2>
+        <div class="name">{{ user.get_full_name|default:user.username }}</div>
+        <div>telah berhasil menyelesaikan kursus</div>
+        <div class="course">{{ course.name }}</div>
+        <div class="date">Tanggal Selesai: {{ completed_at|date:'d F Y' }}</div>
+        <div class="footer">Selamat dan sukses selalu!<br>Simple LMS Team</div>
+    </div>
+</body>
+</html>
