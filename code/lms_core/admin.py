@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from lms_core.models import Category, Course, CourseMember, CourseContent, Comment, Announcement, CourseCompletion
+from lms_core.models import Category, Course, CourseMember, CourseContent, Comment, Announcement, CourseCompletion, ContentCompletion
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -188,7 +188,13 @@ class CourseCompletionAdmin(admin.ModelAdmin):
         # Otomatis isi ContentCompletion untuk semua konten course
         contents = CourseContent.objects.filter(course_id=obj.course)
         for content in contents:
-            from lms_core.models import ContentCompletion
             ContentCompletion.objects.get_or_create(user=obj.user, content=content)
 
 admin_site.register(CourseCompletion, CourseCompletionAdmin)
+
+class ContentCompletionAdmin(admin.ModelAdmin):
+    list_display = ("user", "content", "completed_at")
+    list_filter = ("user", "content")
+    search_fields = ("user__username", "content__name")
+
+admin_site.register(ContentCompletion, ContentCompletionAdmin)

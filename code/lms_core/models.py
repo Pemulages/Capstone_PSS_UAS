@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.contrib import admin
 
 class Course(models.Model):
     name = models.CharField("Nama", max_length=255)

@@ -15,9 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from lms_core.views import index, testing, addData, editData, deleteData, register, list_comments, user_activity_dashboard, course_analytics, list_course_contents, batch_enroll, moderate_comment, enroll_student, create_announcement, show_announcements, edit_announcement, delete_announcement, create_category, show_category, delete_category, course_certificate
+from lms_core.views import index, testing, addData, editData, deleteData, register, list_comments, user_activity_dashboard, course_analytics, list_course_contents, batch_enroll, moderate_comment, enroll_student, create_announcement, show_announcements, edit_announcement, delete_announcement, create_category, show_category, delete_category, course_certificate, mark_content_completed
 from lms_core.api import apiv1
 from lms_core.admin import admin_site
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import user_passes_test
+from django.http import JsonResponse
+
 
 urlpatterns = [
     path('api/v1/', apiv1.urls),
@@ -42,6 +46,7 @@ urlpatterns = [
     path('category/show/', show_category, name='show_category'),
     path('category/<int:category_id>/delete/', delete_category, name='delete_category'),
     path('certificate/<int:user_id>/<int:course_id>/', course_certificate, name='course_certificate'),
+    path('content/mark_completed/', mark_content_completed, name='mark_content_completed'),
 
 
     path('', index),

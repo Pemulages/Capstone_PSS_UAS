@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import user_passes_test
 from django import forms
 
 from lms_core.models import Course, Comment, CourseContent, CourseMember, Announcement, Category, ContentCompletion
@@ -351,3 +352,26 @@ def course_certificate(request, user_id, course_id):
         'course': course,
         'completed_at': completed_at,
     })
+
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import user_passes_test
+from django.http import JsonResponse
+from django.contrib.auth.models import User
+from .models import ContentCompletion, CourseContent
+
+@csrf_exempt
+@user_passes_test(lambda u: u.is_staff)
+def mark_content_completed(request):
+    if request.method == "POST":
+        user_id = request.POST.get("user_id")
+        content_id = request.POST.get("content_id")
+        try:
+            user = User.objects.get(id=user_id)
+            content = CourseContent.objects.get(id=content_id)
+            obj, created = ContentCompletion.objects.get_or_create(user=user, content=content)
+            return JsonResponse({"success": True, "created": created})
+        except User.DoesNotExist:
+            return JsonResponse({"error": "User not found"}, status=404)
+        except CourseContent.DoesNotExist:
+            return JsonResponse({"error": "Content not found"}, status=404)
+    return JsonResponse({"error": "Invalid request"}, status=400)
